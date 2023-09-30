@@ -1,0 +1,20 @@
+{
+  "name": "books",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "postinstall": "npm run compile",
+    "compile": "tsc",
+    "start": "npm run compile && node ./dist/index.js"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.6.1",
+    "typescript": "^5.0.2"
+  },
+  "dependencies": {
+    "@apollo/server": "^4.9.3",
+    "graphql": "^16.8.1"
+  }
+}
