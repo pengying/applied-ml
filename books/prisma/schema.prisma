@@ -1,0 +1,74 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+generator typegraphql {
+  provider = "typegraphql-prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Books {
+  uuid String @id @db.Uuid @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title String @db.Text
+  bookRaw BookRevisions? @relation("BookRaw")
+  bookEdited BookRevisions? @relation("BookEdited")
+}
+
+model BookRevisions {
+  uuid String @id @db.Uuid @default(uuid())
+  isRaw Boolean @default(true)
+  bookRaw Books? @relation("BookRaw", fields: [bookRawId], references:[uuid])
+  bookRawId String? @db.Uuid @unique
+  bookEdited Books? @relation("BookEdited", fields: [bookEditedId], references:[uuid])
+  bookEditedId String? @db.Uuid @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  content String[]
+  // prompt String[]
+  // characterDescriptions String[]
+  // artDescriptions String[]
+  // promptId String @db.VarChar(50)
+  // promptTokens Int
+  // completionTokens Int
+  // totalTokens Int
+  // modelId String @db.VarChar(50)
+}
+
+// model Library {
+//   uuid String @id @db.Uuid @default(uuid())
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+//   title String @db.Text
+//   bookEdited Book? @relation("BookEdited")
+//   bookRaw Book? @relation("BookRaw")
+// }
+
+// model Book {
+//   uuid String @id @db.Uuid @default(uuid())
+//   isRaw Boolean
+//   libraryEdited Library @relation("BookEdited", fields: [libraryEditedId], references:[uuid])
+//   libraryEditedId String @db.Uuid @unique
+//   libraryRaw Library @relation("BookRaw", fields: [libraryRawId], references:[uuid])
+//   libraryRawId String @db.Uuid @unique
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+//   content String[]
+//   prompt String[]
+//   characterDescriptions String[]
+//   artDescriptions String[]
+//   promptId String @db.VarChar(50)
+//   promptTokens Int
+//   completionTokens Int
+//   totalTokens Int
+//   modelId String @db.VarChar(50)
+// }
